@@ -295,12 +295,12 @@ macro(rosbuild_init)
   rosbuild_invoke_rospack("" rosunit path find rosunit)
 
   # Record where we're going to put test results (#2003)
-  execute_process(COMMAND ${rosunit_path}/bin/test_results_dir.py
+  execute_process(COMMAND ${rosunit_path}/scripts/test_results_dir.py
                   OUTPUT_VARIABLE rosbuild_test_results_dir
                   RESULT_VARIABLE _test_results_dir_failed
                   OUTPUT_STRIP_TRAILING_WHITESPACE)
   if(_test_results_dir_failed)
-    message(FATAL_ERROR "Failed to invoke rosunit/bin/test_results_dir.py")
+    message(FATAL_ERROR "Failed to invoke rosunit/scripts/test_results_dir.py")
   endif(_test_results_dir_failed)
 
   # The 'tests' target builds the test program
@@ -319,12 +319,12 @@ macro(rosbuild_init)
   # conditional to ignore failures (most often happens when a stale NFS
   # handle lingers in the test results directory), because CMake doesn't
   # seem to be able to do it.
-  add_custom_target(clean-test-results
+  add_custom_target(rosbuild_clean-test-results
                     if ! rm -rf ${rosbuild_test_results_dir}/${PROJECT_NAME}\; then echo "WARNING: failed to remove test-results directory"\; fi)
-  # Make the tests target depend on clean-test-results, which will ensure
+  # Make the tests target depend on rosbuild_clean-test-results, which will ensure
   # that test results are deleted before we try to build tests, and thus
   # before we try to run tests.
-  add_dependencies(tests clean-test-results)
+  add_dependencies(tests rosbuild_clean-test-results)
   # The 'test-future' target runs the future tests
   add_custom_target(test-future)
 
@@ -373,7 +373,8 @@ macro(rosbuild_init)
 
   # ${gendeps_exe} is a convenience variable that roslang cmake rules
   # must reference as a dependency of msg/srv generation
-  set(gendeps_exe ${roslib_path}/bin/gendeps)
+  # ${gendeps_exe} is set by roslib-extras.cmake
+  find_package(catkin REQUIRED COMPONENTS roslib)
 
   # If the roslang package is available, pull in cmake/roslang.cmake from
   # there; it will in turn include message-generation logic from client
@@ -437,7 +438,11 @@ macro(rosbuild_init)
   #
   find_program(GTEST_EXE NAMES gtest-config DOC "gtest-config executable" ONLY_CMAKE_FIND_ROOT_PATH)
   if (NOT GTEST_EXE)
-    set(_gtest_LIBRARIES -lgtest)
+    if (GTEST_LIBRARIES)
+      set(_gtest_LIBRARIES -l${GTEST_LIBRARIES})
+    else(GTEST_LIBRARIES)
+      set(_gtest_LIBRARIES -lgtest)
+    endif(GTEST_LIBRARIES)
     # Couldn't find gtest-config. Hoping that gtest is in our path either in the system install or where ROS_BINDEPS points to
   else (NOT GTEST_EXE)
 
@@ -589,7 +594,6 @@ macro(rosbuild_add_gtest_build_flags exe)
       if (NOT EXISTS "${CMAKE_BINARY_DIR}/_gtest_from_src")
         # for now, this would only work on Ubuntu
         add_subdirectory("/usr/src/gtest/" ${CMAKE_BINARY_DIR}/_gtest_from_src)
-        add_dependencies(${exe} gtest gtest_main)
       endif()
     else()
       message(WARNING "GTest not found; C++ tests will fail to build.")
@@ -603,6 +607,7 @@ macro(rosbuild_add_gtest_build_flags exe)
   target_link_libraries(${exe} ${_gtest_LIBRARIES})
   rosbuild_add_link_flags(${exe} ${_gtest_LDFLAGS_OTHER})
   rosbuild_declare_test(${exe})
+  add_dependencies(${exe} gtest gtest_main)
 endmacro(rosbuild_add_gtest_build_flags)
 
 # Declare an executable to be a test harness, which excludes it from the
@@ -753,9 +758,8 @@ macro(rosbuild_gendeps _pkg _msgfile)
   if(NOT ${_pkg}_${_msgfile}_GENDEPS_COMPUTED)
     # Call out to the gendeps tool to get full paths to .msg files on
     # which this one depends, for proper dependency tracking
-    # ${roslib_path} was determined inside rospack()
     execute_process(
-      COMMAND ${roslib_path}/bin/gendeps ${_input}
+      COMMAND ${gendeps_exe} ${_input}
       OUTPUT_VARIABLE __other_msgs
       ERROR_VARIABLE __rospack_err_ignore
       OUTPUT_STRIP_TRAILING_WHITESPACE)

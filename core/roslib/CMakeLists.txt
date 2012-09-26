@@ -1,8 +1,14 @@
 project(roslib)
-find_package(catkin REQUIRED)
-find_package(ROS REQUIRED COMPONENTS rospack rosunit)
+find_package(catkin REQUIRED COMPONENTS rospack)
+catkin_package(
+  INCLUDE_DIRS include
+  LIBRARIES roslib
+  CFG_EXTRAS roslib-extras.cmake)
 
-include_directories(include ${Boost_INCLUDE_DIRS} ${ROS_INCLUDE_DIRS})
+find_package(Boost REQUIRED COMPONENTS thread)
+
+include_directories(include ${Boost_INCLUDE_DIRS} ${catkin_INCLUDE_DIRS})
+link_directories(${catkin_LIBRARY_DIRS})
 
 # Avoid a boost warning that pops up when using msvc compiler
 if(MSVC)
@@ -10,35 +16,38 @@ if(MSVC)
 endif()
 
 add_library(roslib src/package.cpp)
-target_link_libraries(roslib ${Boost_LIBRARIES} ${ROS_LIBRARIES})
+target_link_libraries(roslib ${Boost_LIBRARIES} ${catkin_LIBRARIES})
 
 if(NOT (APPLE OR WIN32 OR MINGW))
   target_link_libraries(roslib rt)
 endif()
 
 
-#explicitly install library and includes
+catkin_add_env_hooks(10.ros SHELLS bat sh DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/env-hooks)
+
+catkin_python_setup()
+
 install(TARGETS roslib
-  ARCHIVE DESTINATION lib
-  LIBRARY DESTINATION lib
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   )
-
 install(DIRECTORY include/
-        DESTINATION include
-        FILES_MATCHING PATTERN "*.h"
-        PATTERN ".svn" EXCLUDE)
+  DESTINATION ${CATKIN_GLOBAL_INCLUDE_DESTINATION}
+  FILES_MATCHING PATTERN "*.h")
+install(FILES config/rosconsole.config
+  DESTINATION ${CATKIN_GLOBAL_SHARE_DESTINATION}/ros/config)
 install(PROGRAMS scripts/gendeps
-        DESTINATION share/roslib/bin)
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
-catkin_project(roslib
-  LIBRARIES roslib
-  INCLUDE_DIRS include
-  )
 
-#integration tests
+catkin_add_nosetests(test)
 
-add_gtest(${PROJECT_NAME}-utest test/utest.cpp)
-target_link_libraries(${PROJECT_NAME}-utest roslib ${Boost_LIBRARIES} ${ROS_LIBRARIES})
+catkin_add_gtest(${PROJECT_NAME}-utest test/utest.cpp WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+if(TARGET ${PROJECT_NAME}-utest)
+  target_link_libraries(${PROJECT_NAME}-utest roslib ${Boost_LIBRARIES} ${catkin_LIBRARIES})
+endif()
 
-add_gtest(${PROJECT_NAME}-test_package test/package.cpp)
-target_link_libraries(${PROJECT_NAME}-test_package roslib ${ROS_LIBRARIES})
+catkin_add_gtest(${PROJECT_NAME}-test_package test/package.cpp)
+if(TARGET ${PROJECT_NAME}-test_package)
+  target_link_libraries(${PROJECT_NAME}-test_package roslib ${catkin_LIBRARIES})
+endif()
