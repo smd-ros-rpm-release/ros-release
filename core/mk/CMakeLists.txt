@@ -3,8 +3,8 @@ project(mk)
 find_package(catkin REQUIRED)
 catkin_package()
 
-install(DIRECTORY .
-  DESTINATION ${CATKIN_GLOBAL_SHARE_DESTINATION}/ros/core/mk
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
   PATTERN "CMakeLists.txt" EXCLUDE
   PATTERN "package.xml" EXCLUDE
   PATTERN ".svn" EXCLUDE)

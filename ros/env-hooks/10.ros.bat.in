@@ -4,9 +4,6 @@ REM scrub old ROS bin dirs, to avoid accidentally finding the wrong executables
 set PATH=`python -c "import os; print(os.pathsep.join([x for x in \"$PATH\".split(os.pathsep) if not any([d for d in ['cturtle', 'diamondback', 'electric', 'fuerte'] if d in x])]))"`
 
 set ROS_DISTRO=groovy
-if [%ROS_MASTER_URI]==[] (
-    set ROS_MASTER_URI=http://localhost:11311
-)
 
 REM python function to generate ROS package path based on all parent workspaces (prepends the separator if necessary)
 REM do not use EnableDelayedExpansion here, it messes with the != symbols

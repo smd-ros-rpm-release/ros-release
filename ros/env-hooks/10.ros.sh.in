@@ -4,9 +4,6 @@
 export PATH=`python -c "import os; print(os.pathsep.join([x for x in \"$PATH\".split(os.pathsep) if not any([d for d in ['cturtle', 'diamondback', 'electric', 'fuerte'] if d in x])]))"`
 
 export ROS_DISTRO=groovy
-if [ ! "$ROS_MASTER_URI" ] ; then
-    export ROS_MASTER_URI=http://localhost:11311
-fi
 
 # python function to generate ROS package path based on all workspaces
 PYTHON_CODE_BUILD_ROS_PACKAGE_PATH=$(cat <<EOF
@@ -33,7 +30,7 @@ EOF
 export ROS_PACKAGE_PATH=`python -c "$PYTHON_CODE_BUILD_ROS_PACKAGE_PATH"`
 
 if @BUILDSPACE@; then
-    export ROS_ROOT=@CMAKE_CURRENT_SOURCE_DIR@/../..
+    export ROS_ROOT=@CMAKE_CURRENT_SOURCE_DIR@
     export ROS_ETC_DIR=@CATKIN_BUILD_PREFIX@/@CATKIN_PACKAGE_ETC_DESTINATION@
 fi
 if @INSTALLSPACE@; then
