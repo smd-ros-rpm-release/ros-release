@@ -8,6 +8,6 @@ Standards-Version: 3.9.2
 
 Package: ros-groovy-rosunit
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, 
+Depends: ${shlibs:Depends}, ${misc:Depends}, python-rospkg
 Description: Unit-testing package for ROS. This is a lower-level library for rostest and handles unit tests, whereas rostest handles integration tests.
 
