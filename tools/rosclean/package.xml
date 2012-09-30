@@ -1,6 +1,6 @@
 <package>
   <name>rosclean</name>
-  <version>1.9.15</version>
+  <version>1.9.16</version>
   <description>
     rosclean: cleanup filesystem resources (e.g. log files).
   </description>
@@ -11,4 +11,6 @@
   <author>Ken Conley</author>
 
   <build_depend>catkin</build_depend>
+
+  <run_depend>python-rospkg</run_depend>
 </package>
