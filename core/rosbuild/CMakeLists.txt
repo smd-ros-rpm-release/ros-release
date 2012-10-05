@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8.3)
 project(rosbuild)
 find_package(catkin REQUIRED)
 catkin_package()
@@ -18,5 +18,8 @@ install(FILES
   DESTINATION ${CATKIN_GLOBAL_SHARE_DESTINATION}/ros/core/rosbuild/tests)
 install(PROGRAMS
   bin/check_same_directories.py
-  bin/download_checkmd5.py
   DESTINATION ${CATKIN_GLOBAL_SHARE_DESTINATION}/ros/core/rosbuild/bin)
+install(PROGRAMS
+  bin/download_checkmd5.py
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/bin)
+  
