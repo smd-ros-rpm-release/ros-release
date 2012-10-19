@@ -1,0 +1,12 @@
+Source: rosbuild
+Section: misc
+Priority: extra
+Maintainer: Dirk Thomas <dthomas@willowgarage.com>
+Build-Depends: debhelper (>= 7.0.50~), ros-groovy-catkin
+Homepage: http://ros.org/wiki/rosbuild
+Standards-Version: 3.9.2
+
+Package: rosbuild
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, 
+Description: rosbuild contains scripts for managing the CMake-based build system for ROS.
