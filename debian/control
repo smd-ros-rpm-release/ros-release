@@ -1,0 +1,12 @@
+Source: roslang
+Section: misc
+Priority: extra
+Maintainer: Dirk Thomas <dthomas@willowgarage.com>
+Build-Depends: debhelper (>= 7.0.50~), ros-groovy-catkin
+Homepage: http://ros.org/wiki/roslang
+Standards-Version: 3.9.2
+
+Package: roslang
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-groovy-genmsg
+Description: roslang is a common package that all ROS client libraries depend on. This is mainly used to find client libraries (via 'rospack depends-on1 roslang').
