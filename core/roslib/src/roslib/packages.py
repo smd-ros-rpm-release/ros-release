@@ -30,7 +30,7 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-# Revision $Id: packages.py 17091 2012-09-25 04:51:11Z dthomas $
+# Revision $Id: packages.py 17204 2012-11-04 04:24:20Z dthomas $
 # $Author: dthomas $
 
 """
@@ -174,6 +174,7 @@ def get_pkg_dir(package, required=True, ros_root=None, ros_package_path=None):
         if not pkg_dir:
             raise InvalidROSPkgException("Cannot locate installation of package %s: %s. ROS_ROOT[%s] ROS_PACKAGE_PATH[%s]"%(package, rperr.strip(), ros_root, ros_package_path))
 
+        pkg_dir = os.path.normpath(pkg_dir)
         if not os.path.exists(pkg_dir):
             raise InvalidROSPkgException("Cannot locate installation of package %s: [%s] is not a valid path. ROS_ROOT[%s] ROS_PACKAGE_PATH[%s]"%(package, pkg_dir, ros_root, ros_package_path))
         elif not os.path.isdir(pkg_dir):
@@ -495,7 +496,7 @@ def find_resource(pkg, resource_name, filter_fn=None, rospack=None):
     matches = []
     for search_dirs in ['libexec', 'share']:
         try:
-            search_paths, _ = catkin_find(search_dirs=[search_dirs], project=pkg)
+            search_paths = catkin_find(search_dirs=[search_dirs], project=pkg)
             for search_path in search_paths:
                 matches.extend(_find_resource(search_path, resource_name, filter_fn=filter_fn))
         except RuntimeError:
