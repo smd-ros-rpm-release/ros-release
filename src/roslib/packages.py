@@ -30,7 +30,7 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-# Revision $Id: packages.py 17204 2012-11-04 04:24:20Z dthomas $
+# Revision $Id: packages.py 17211 2012-11-05 22:21:22Z dthomas $
 # $Author: dthomas $
 
 """
@@ -494,13 +494,15 @@ def find_resource(pkg, resource_name, filter_fn=None, rospack=None):
     # if found in binary dir, start with that.  in any case, use matches
     # from ros_package_path
     matches = []
-    for search_dirs in ['libexec', 'share']:
-        try:
-            search_paths = catkin_find(search_dirs=[search_dirs], project=pkg)
-            for search_path in search_paths:
-                matches.extend(_find_resource(search_path, resource_name, filter_fn=filter_fn))
-        except RuntimeError:
-            pass
+    search_paths = catkin_find(search_dirs=['libexec', 'share'], project=pkg, first_matching_workspace_only=True)
+    for search_path in search_paths:
+        matches.extend(_find_resource(search_path, resource_name, filter_fn=filter_fn))
+
     matches.extend(_find_resource(pkg_path, resource_name, filter_fn=filter_fn))
-    # Uniquify the results, in case we found the same file twice
-    return list(set(matches))
+
+    # Uniquify the results, in case we found the same file twice, while keeping order
+    unique_matches = []
+    for match in matches:
+        if match not in unique_matches:
+            unique_matches.append(match)
+    return unique_matches
