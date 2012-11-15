@@ -1,6 +1,6 @@
 <package>
   <name>rosbuild</name>
-  <version>1.9.32</version>
+  <version>1.9.33</version>
   <description>
     rosbuild contains scripts for managing the CMake-based build system for ROS.
   </description>
@@ -13,4 +13,5 @@
   <author>Morgan Quigley</author>
 
   <build_depend>catkin</build_depend>
+  <build_depend>pkg-config</build_depend>
 </package>
