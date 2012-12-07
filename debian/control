@@ -1,0 +1,12 @@
+Source: ros-groovy-rosboost-cfg
+Section: misc
+Priority: extra
+Maintainer: Dirk Thomas <dthomas@willowgarage.com>
+Build-Depends: debhelper (>= 7.0.50~), ros-groovy-catkin
+Homepage: http://ros.org/wiki/rosboost_cfg
+Standards-Version: 3.9.2
+
+Package: ros-groovy-rosboost-cfg
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, 
+Description: Contains scripts used by the rosboost-cfg tool for determining cflags/lflags/etc. of boost on your system
