@@ -1,6 +1,6 @@
 <package>
   <name>roslib</name>
-  <version>1.9.39</version>
+  <version>1.9.40</version>
   <description>
     Base dependencies and support libraries for ROS.
     roslib contains many of the common data structures and tools that are shared across ROS client library implementations.
@@ -18,6 +18,7 @@
   <build_depend>boost</build_depend>
   <build_depend>rospack</build_depend>
 
+  <run_depend>catkin</run_depend>
   <run_depend>python-rospkg</run_depend>
   <run_depend>rospack</run_depend>
 
