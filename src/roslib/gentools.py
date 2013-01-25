@@ -31,8 +31,8 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-# Revision $Id: gentools.py 15482 2011-12-29 22:56:48Z kwc $
-# $Author: kwc $
+# Revision $Id$
+# $Author$
 
 """
 Library for supporting message and service generation for all ROS
