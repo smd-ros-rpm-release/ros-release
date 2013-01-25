@@ -31,7 +31,7 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-# Revision $Id: stacks.py 16669 2012-04-26 18:00:33Z kwc $
+# Revision $Id$
 
 """
 Warning: do not use this library.  It is unstable and most of the routines

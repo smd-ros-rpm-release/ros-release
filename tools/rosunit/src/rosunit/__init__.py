@@ -30,7 +30,7 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-# Revision $Id: __init__.py 15540 2011-12-30 22:43:26Z kwc $
+# Revision $Id$
 
 """
 Library and tools support unit testing in ROS.

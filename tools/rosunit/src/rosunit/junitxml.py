@@ -31,7 +31,7 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-# Revision $Id: junitxml.py 16169 2012-01-30 18:05:49Z dthomas $
+# Revision $Id$
 
 """
 Library for reading and manipulating Ant JUnit XML result files.

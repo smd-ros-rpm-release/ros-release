@@ -30,8 +30,8 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-# Revision $Id: srvs.py 15109 2011-10-05 23:21:38Z kwc $
-# $Author: kwc $
+# Revision $Id$
+# $Author$
 """
 ROS Service Description Language Spec
 Implements U{http://ros.org/wiki/srv}

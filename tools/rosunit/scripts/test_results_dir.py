@@ -31,7 +31,7 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-# Revision $Id: test_results_dir.py 15134 2011-10-06 18:57:56Z kwc $
+# Revision $Id$
 
 """
 test_results_dir.py simply prints the directory that rosunit/rostest
