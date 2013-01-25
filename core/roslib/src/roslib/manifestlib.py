@@ -31,8 +31,8 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-# Revision $Id: manifestlib.py 16804 2012-06-18 17:12:08Z dthomas $
-# $Author: dthomas $
+# Revision $Id$
+# $Author$
 
 """
 Internal library for processing 'manifest' files, i.e. manifest.xml and stack.xml.
