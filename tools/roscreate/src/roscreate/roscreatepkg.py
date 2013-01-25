@@ -30,7 +30,7 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-# Revision $Id: roscreatepkg.py 16411 2012-02-28 18:44:35Z kwc $
+# Revision $Id$
 
 from __future__ import print_function
 

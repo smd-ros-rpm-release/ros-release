@@ -30,7 +30,7 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-# Revision $Id: rosunit_main.py 15601 2012-01-03 02:08:30Z gerkey $
+# Revision $Id$
 
 from __future__ import with_statement
 
