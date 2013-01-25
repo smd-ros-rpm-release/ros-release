@@ -31,7 +31,7 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-# Revision $Id: __init__.py 16232 2012-02-02 23:46:13Z kwc $
+# Revision $Id$
 
 import roscreate.core
 import roscreate.roscreatepkg
