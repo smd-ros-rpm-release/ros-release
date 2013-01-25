@@ -30,7 +30,7 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-# Revision $Id: core.py 16912 2012-08-28 19:58:56Z dthomas $
+# Revision $Id$
 
 import os
 import sys

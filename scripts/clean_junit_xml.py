@@ -31,7 +31,7 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-# Revision $Id: clean_junit_xml.py 15606 2012-01-03 08:14:15Z gerkey $
+# Revision $Id$
 
 from __future__ import print_function
 
