@@ -30,8 +30,8 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-# Revision $Id: exceptions.py 6490 2009-10-12 21:26:50Z kwc $
-# $Author: kwc $
+# Revision $Id$
+# $Author$
 
 """
 Provides the L{ROSLibException} class, which is common to many roslib libraries.

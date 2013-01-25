@@ -31,7 +31,7 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-# Revision $Id: check_test_ran.py 16671 2012-04-27 16:15:28Z dthomas $
+# Revision $Id$
 
 """
 Writes a test failure out to test file if it doesn't exist.

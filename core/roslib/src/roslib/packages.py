@@ -30,8 +30,8 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-# Revision $Id: packages.py 17211 2012-11-05 22:21:22Z dthomas $
-# $Author: dthomas $
+# Revision $Id$
+# $Author$
 
 """
 Warning: do not use this library.  It is unstable and most of the routines
