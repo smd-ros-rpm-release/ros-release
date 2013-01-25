@@ -30,7 +30,7 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-# Revision $Id: names.py 16526 2012-03-14 18:49:54Z kwc $
+# Revision $Id$
 
 """
 Warning: do not use this library.  It is unstable and most of the routines
