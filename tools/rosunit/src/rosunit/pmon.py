@@ -30,7 +30,7 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-# Revision $Id: pmon.py 15476 2011-12-29 22:00:24Z kwc $
+# Revision $Id$
 
 """
 Process monitor
