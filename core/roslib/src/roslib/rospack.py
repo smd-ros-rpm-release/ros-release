@@ -30,8 +30,8 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-# Revision $Id: rospack.py 16526 2012-03-14 18:49:54Z kwc $
-# $Author: kwc $
+# Revision $Id$
+# $Author$
 
 """
 Warning: do not use this library.  It is unstable and most of the routines
