@@ -1,17 +1,16 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 2.8)
 project(rosbash)
-find_package(catkin)
-catkin_package()
-
 install(FILES rosbash rostcsh roszsh
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
+        DESTINATION share/rosbash)
 install(PROGRAMS scripts/rosrun
-  DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION})
+        DESTINATION bin)
 
-# making toplevel forward script for bash script rosrun
+message(STATUS "   Making toplevel forward script for bash script rosrun")
 set(BASH_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/scripts/rosrun)
 configure_file(${catkin_EXTRAS_DIR}/templates/script.bash.in
-  ${CATKIN_DEVEL_PREFIX}/bin/rosrun
+  ${CMAKE_BINARY_DIR}/bin/rosrun
   @ONLY)
 
-catkin_add_env_hooks(15.rosbash SHELLS bash tcsh zsh DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/env-hooks)
+catkin_add_env_hooks(15.rosbash
+  SHELLS bash zsh
+  )

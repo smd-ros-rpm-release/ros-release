@@ -50,7 +50,7 @@ class RoslibPackagesTest(unittest.TestCase):
   def test_get_pkg_dir(self):
     import roslib.packages
     import roslib.rospack
-    path = os.path.normpath(roslib.rospack.rospackexec(['find', 'roslib']))
+    path = roslib.rospack.rospackexec(['find', 'roslib'])
     self.assertEquals(path, roslib.packages.get_pkg_dir('roslib'))
     try:
       self.assertEquals(path, roslib.packages.get_pkg_dir('fake_roslib'))      
@@ -72,7 +72,7 @@ class RoslibPackagesTest(unittest.TestCase):
     self.assertEquals((None, None), roslib.packages.get_dir_pkg(os.path.dirname(path)))
     
 def get_roslib_path():
-    return os.path.realpath(os.path.abspath(os.path.join(get_test_path(), '..')))
+    return os.path.abspath(os.path.join(get_test_path(), '..'))
 
 def get_test_path():
     return os.path.abspath(os.path.dirname(__file__))
