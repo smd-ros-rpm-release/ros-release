@@ -1,5 +1,5 @@
 # set EXTRA_CMAKE_FLAGS in the including Makefile in order to add tweaks
-CMAKE_FLAGS= -Wdev -DCMAKE_TOOLCHAIN_FILE=$(ROS_ROOT)/core/rosbuild/rostoolchain.cmake $(EXTRA_CMAKE_FLAGS)
+CMAKE_FLAGS= -Wdev -DCMAKE_TOOLCHAIN_FILE=`rospack find rosbuild`/rostoolchain.cmake $(EXTRA_CMAKE_FLAGS)
 
 # The all target does the heavy lifting, creating the build directory and
 # invoking CMake
@@ -30,7 +30,7 @@ test: all
 test-nobuild:
 	@mkdir -p build
 	cd build && cmake $(CMAKE_FLAGS) -Drosbuild_test_nobuild=1 ..
-	if cd build && make rosbuild_clean-test-results && make -k test; then make test-results; else make test-results && exit 1; fi
+	if cd build && make clean-test-results && make -k test; then make test-results; else make test-results && exit 1; fi
 tests: all
 	cd build && make $@
 test-future: all

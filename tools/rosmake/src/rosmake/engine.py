@@ -41,7 +41,6 @@ import threading
 import traceback
 
 import rospkg
-from rospkg import ResourceNotFound
 
 try: 
     from exceptions import SystemExit #Python 2.x
@@ -54,7 +53,6 @@ from . import parallel_build
 from . import package_stats
 
 from optparse import OptionParser
-from gcc_output_parse import Warnings
 
 # #3883
 _popen_lock = threading.Lock()
@@ -374,12 +372,12 @@ class RosMakeAll:
         """
         local_env = os.environ.copy()
         if self.ros_parallel_jobs > 0:
-            local_env['ROS_PARALLEL_JOBS'] = "-j -l%d" % self.ros_parallel_jobs
+            local_env['ROS_PARALLEL_JOBS'] = "-l%d" % self.ros_parallel_jobs
         elif "ROS_PARALLEL_JOBS" not in os.environ: #if no environment setup and no args fall back to # cpus
             # num_cpus check can (on OS X) trigger a Popen(), which has
             #the multithreading bug we wish to avoid on Py2.7.
             with _popen_lock:
-                local_env['ROS_PARALLEL_JOBS'] = "-j -l%d" % parallel_build.num_cpus()
+                local_env['ROS_PARALLEL_JOBS'] = "-l%d" % parallel_build.num_cpus()
         local_env['SVN_CMDLINE'] = "svn --non-interactive"
         cmd = ["bash", "-c", "cd %s && %s "%(self.rospack.get_path(package), make_command()) ] #UNIXONLY
         if argument:
@@ -422,15 +420,10 @@ class RosMakeAll:
                     self.printer.print_full_verbose( pstd_out)
                     with self._result_lock:
                         self.result[argument][p] = True
-                    warnings = Warnings( pstd_out )
-                    num_warnings = len( warnings.warning_lines )
+
+                    num_warnings = len(re.findall("warning:", pstd_out))
                     if num_warnings > 0:
-                        return_string =  "[PASS] [ %.2f seconds ] [ %d warnings "%(self.profile[argument][p], num_warnings)
-                        warning_dict = warnings.analyze();
-                        for warntype,warnlines in warning_dict.iteritems():
-                            if len( warnlines ) > 0:
-                                return_string = return_string + '[ {0:d} {1} ] '.format(len(warnlines),warntype)
-                        return_string = return_string + ' ]'
+                        return_string =  ("[PASS] [ %.2f seconds ] -- WARNING: %d compiler warnings"%(self.profile[argument][p], num_warnings))
                     else:
                         return_string =  ("[PASS] [ %.2f seconds ]"%( self.profile[argument][p]))
                     self.output_to_file(p, log_type, pstd_out, num_warnings > 0)
@@ -761,15 +754,11 @@ class RosMakeAll:
             
         required_packages = self.specified_packages[:]
 
-        # catch packages of dependent stacks when specified stack is zero-sized #3528
+        # catch dependent packages which are inside of zero sized stacks #3528 
         # add them to required list but not the specified list. 
         for s in stacks_arguments:
-            if not rosstack.packages_of(s):
-                for d in rosstack.get_depends(s, implicit=False):
-                    try:
-                        required_packages.extend(rosstack.packages_of(d))
-                    except ResourceNotFound:
-                        self.printer.print_all('WARNING: The stack "%s" was not found. We will assume it is using the new buildsystem and try to continue...' % d)
+            for d in rosstack.get_depends(s, implicit=False):
+                required_packages.extend(rosstack.packages_of(d))
 
         # deduplicate required_packages
         required_packages = list(set(required_packages))
