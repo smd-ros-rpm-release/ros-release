@@ -33,7 +33,7 @@ tracks:
     last_version: 1.9.42
     name: ros
     patches: null
-    release_inc: '1'
+    release_inc: '2'
     release_tag: :{version}
     ros_distro: hydro
     vcs_type: git
