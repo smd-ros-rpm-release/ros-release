@@ -1,0 +1,12 @@
+Source: ros-fuerte-ros
+Section: misc
+Priority: extra
+Maintainer: Tully Foote <tfoote@willowgarage.com>
+Build-Depends: debhelper (>= 7.0.50~), libboost-all-dev, libbz2-dev, libgtest-dev, pkg-config, python-dev, python-nose, python-rospkg, ros-fuerte-catkin, ros-fuerte-rospack
+Homepage: http://www.ros.org/wiki/ROS
+Standards-Version: 3.9.2
+
+Package: ros-fuerte-ros
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libboost-all-dev, libbz2-dev, libgtest-dev, python-dev, python-nose, python-rospkg, ros-fuerte-catkin, ros-fuerte-rospack
+Description: ROS packaging system
