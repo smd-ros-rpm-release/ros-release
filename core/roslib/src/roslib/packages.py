@@ -46,14 +46,12 @@ import string
 
 from subprocess import Popen, PIPE
 
+from catkin.find_in_workspaces import find_in_workspaces as catkin_find
 import rospkg
 
 import roslib.manifest
 
 SRC_DIR = 'src'
-# TODO: these really don't belong here
-CATKIN_SOURCE_DIR = 'CATKIN_SOURCE_DIR'
-CATKIN_BINARY_DIR = 'CATKIN_BINARY_DIR'
 
 # aliases
 ROS_PACKAGE_PATH = rospkg.environment.ROS_PACKAGE_PATH
@@ -78,6 +76,7 @@ class MultipleNodesException(ROSPkgException):
 # TODO: go through the code and eliminate unused methods -- there's far too many combos here
 
 MANIFEST_FILE = 'manifest.xml'
+PACKAGE_FILE = 'package.xml'
 
 #
 # Map package/directory structure
@@ -98,10 +97,10 @@ def get_dir_pkg(d):
 
     parent = os.path.dirname(os.path.realpath(d))
     #walk up until we hit ros root or ros/pkg
-    while not os.path.exists(os.path.join(d, MANIFEST_FILE)) and parent != d:
+    while not os.path.exists(os.path.join(d, MANIFEST_FILE)) and not os.path.exists(os.path.join(d, PACKAGE_FILE)) and parent != d:
         d = parent
         parent = os.path.dirname(d)
-    if os.path.exists(os.path.join(d, MANIFEST_FILE)):
+    if os.path.exists(os.path.join(d, MANIFEST_FILE)) or os.path.exists(os.path.join(d, PACKAGE_FILE)):
         pkg = os.path.basename(os.path.abspath(d))
         return d, pkg
     return None, None
@@ -175,6 +174,7 @@ def get_pkg_dir(package, required=True, ros_root=None, ros_package_path=None):
         if not pkg_dir:
             raise InvalidROSPkgException("Cannot locate installation of package %s: %s. ROS_ROOT[%s] ROS_PACKAGE_PATH[%s]"%(package, rperr.strip(), ros_root, ros_package_path))
 
+        pkg_dir = os.path.normpath(pkg_dir)
         if not os.path.exists(pkg_dir):
             raise InvalidROSPkgException("Cannot locate installation of package %s: [%s] is not a valid path. ROS_ROOT[%s] ROS_PACKAGE_PATH[%s]"%(package, pkg_dir, ros_root, ros_package_path))
         elif not os.path.isdir(pkg_dir):
@@ -384,7 +384,7 @@ def list_pkgs_by_path(path, packages=None, cache=None, env=None):
             
     return packages
 
-def find_node(pkg, node_type, rospack=None, catkin_packages_cache=None):
+def find_node(pkg, node_type, rospack=None):
     """
     Warning: unstable API due to catkin.
 
@@ -397,40 +397,12 @@ def find_node(pkg, node_type, rospack=None, catkin_packages_cache=None):
 
     if rospack is None:
         rospack = rospkg.RosPack()
-    return find_resource(pkg, node_type, filter_fn=_executable_filter,
-                             rospack=rospack, catkin_packages_cache=catkin_packages_cache)
+    return find_resource(pkg, node_type, filter_fn=_executable_filter, rospack=rospack)
 
 def _executable_filter(test_path):
     s = os.stat(test_path)
     return (s.st_mode & (stat.S_IRUSR | stat.S_IXUSR) == (stat.S_IRUSR | stat.S_IXUSR))
-    
-# TODO: this routine really belongs in catkin
-def _load_catkin_packages_cache(catkin_packages_cache, env=None):
-    """
-    env[CATKIN_BINARY_DIR] *must* be set
 
-    :param env: OS environment (defaults to os.environ if None/not set)
-    :param catkin_packages_cache: dictionary to read cache into.
-      Contents of dictionary will be replaced if cache is read. ``dict``
-
-    :raises: :exc:`KeyError` if env[CATKIN_BINARY_DIR] is not set
-    """
-    if env is None:
-        env=os.environ
-    prefix = env[CATKIN_BINARY_DIR]
-    cache_file = os.path.join(prefix, 'etc', 'packages.list')
-    if os.path.isfile(cache_file):
-        catkin_packages_cache.clear()
-        with open(cache_file, 'r') as f:
-            for l in f.readlines():
-                l = l.strip()
-                # Example:
-                # rosconsole ros_comm/tools/rosconsole\n
-                if not l:
-                    continue
-                idx = l.find(' ')
-                catkin_packages_cache[l[:idx]] = os.path.join(prefix, l[idx+1:])
-    
 def _find_resource(d, resource_name, filter_fn=None):
     """
     subroutine of find_resource
@@ -441,7 +413,7 @@ def _find_resource(d, resource_name, filter_fn=None):
         # Windows logic requires more file patterns to resolve and is
         # not case-sensitive, so leave it separate
 
-        # in the near-term, just hack in support for .exe/.bat. In the long
+        # in the near-term, just hack in support for .exe/.bat/.py. In the long
         # term this needs to:
         #
         #  * parse PATHEXT to generate matches
@@ -451,7 +423,7 @@ def _find_resource(d, resource_name, filter_fn=None):
         # - We still have to look for bare node_type as user may have
         #   specified extension manually
         resource_name = resource_name.lower()
-        patterns = [resource_name, resource_name+'.exe', resource_name+'.bat']
+        patterns = [resource_name, resource_name+'.exe', resource_name+'.bat', resource_name+'.py']
         for p, dirs, files in os.walk(d):
             # case insensitive
             files = [f.lower() for f in files]
@@ -485,7 +457,7 @@ def _find_resource(d, resource_name, filter_fn=None):
 # TODO: this routine really belongs in rospkg, but the catkin-isms really, really don't
 # belong in rospkg.  With more thought, they can probably be abstracted out so as
 # to no longer be catkin-specific. 
-def find_resource(pkg, resource_name, filter_fn=None, rospack=None, catkin_packages_cache=None):
+def find_resource(pkg, resource_name, filter_fn=None, rospack=None):
     """
     Warning: unstable API due to catkin.
 
@@ -499,15 +471,15 @@ def find_resource(pkg, resource_name, filter_fn=None, rospack=None, catkin_packa
     :param filter: function that takes in a path argument and
         returns True if the it matches the desired resource, ``fn(str)``
     :param rospack: `rospkg.RosPack` instance to use
-    :param catkin_packages_cache: dictionary for caching catkin packages.list
     :returns: lists of matching paths for resource within a given scope, ``[str]``
     :raises: :exc:`rospkg.ResourceNotFound` If package does not exist 
     """
 
     # New resource-location policy in Fuerte, induced by the new catkin 
     # build system:
-    #   (1) If CATKIN_BINARY_DIR is set, look recursively there.  If the
-    #       resource is found, done.  Else continue:
+    #   (1) Use catkin_find to find libexec and share locations, look
+    #       recursively there.  If the resource is found, done.
+    #       Else continue:
     #   (2) If ROS_PACKAGE_PATH is set, look recursively there.  If the
     #       resource is found, done.  Else raise
     #
@@ -515,21 +487,22 @@ def find_resource(pkg, resource_name, filter_fn=None, rospack=None, catkin_packa
 
     if rospack is None:
         rospack = rospkg.RosPack()
-    if catkin_packages_cache is None:
-        catkin_packages_cache = {}
-        
+
     # lookup package as it *must* exist
     pkg_path = rospack.get_path(pkg)
-    
-    # load catkin packages list, if necessary
-    if CATKIN_BINARY_DIR in os.environ and not catkin_packages_cache:
-        _load_catkin_packages_cache(catkin_packages_cache)
 
     # if found in binary dir, start with that.  in any case, use matches
     # from ros_package_path
     matches = []
-    if pkg in catkin_packages_cache:
-        matches.extend(_find_resource(catkin_packages_cache[pkg], resource_name, filter_fn=filter_fn))
+    search_paths = catkin_find(search_dirs=['libexec', 'share'], project=pkg, first_matching_workspace_only=True)
+    for search_path in search_paths:
+        matches.extend(_find_resource(search_path, resource_name, filter_fn=filter_fn))
+
     matches.extend(_find_resource(pkg_path, resource_name, filter_fn=filter_fn))
-    # Uniquify the results, in case we found the same file twice
-    return list(set(matches))
+
+    # Uniquify the results, in case we found the same file twice, while keeping order
+    unique_matches = []
+    for match in matches:
+        if match not in unique_matches:
+            unique_matches.append(match)
+    return unique_matches

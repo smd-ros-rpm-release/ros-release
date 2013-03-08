@@ -20,6 +20,21 @@ foreach(_l ${_roslang_LANGS})
   endif(${_l}_CMAKE)
 endforeach(_l)
 
+# Hack to resolve languages from wet which rospack does not support yet
+find_package(catkin QUIET COMPONENTS genmsg)
+if(genmsg_FOUND)
+  foreach(_l ${CATKIN_MESSAGE_GENERATORS})
+    string(REPLACE "gen" "ros" _l ${_l})
+    rosbuild_find_ros_package(${_l})
+    if(${_l}_PACKAGE_PATH)
+      set(_cmake_fragment ${${_l}_PACKAGE_PATH}/rosbuild/${_l}.cmake)
+      if(EXISTS ${_cmake_fragment})
+        list(APPEND _cmake_fragments ${_cmake_fragment})
+      endif()
+    endif(${_l}_PACKAGE_PATH)
+  endforeach(_l)
+endif()
+
 # Now include them all
 foreach(_f ${_cmake_fragments})
   if(NOT EXISTS ${_f})
