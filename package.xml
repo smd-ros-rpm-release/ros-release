@@ -1,8 +1,8 @@
 <package>
   <name>ros</name>
-  <version>1.9.23</version>
+  <version>1.9.45</version>
   <description>ROS packaging system</description>
-  <maintainer email="dthomas@willowgarage.com">Dirk Thomas</maintainer>
+  <maintainer email="dthomas@osrfoundation.org">Dirk Thomas</maintainer>
   <license>BSD</license>
 
   <url type="website">http://www.ros.org/wiki/ROS</url>
@@ -18,7 +18,7 @@
   <author>Morgan Quigley</author>
   <author>Rob Wheeler</author>
 
-  <build_depend>catkin</build_depend>
+  <buildtool_depend>catkin</buildtool_depend>
 
   <run_depend>catkin</run_depend> <!-- only for backward compatibility with rosbuild -->
   <run_depend>mk</run_depend>
@@ -31,4 +31,8 @@
   <run_depend>roscreate</run_depend>
   <run_depend>rosmake</run_depend>
   <run_depend>rosunit</run_depend>
+
+  <export>
+    <metapackage/>
+  </export>
 </package>
