@@ -245,9 +245,14 @@ macro(rosbuild_init)
     # The following code removes duplicate libraries from the link line,
     # saving only the last one.
     #
-    list(REVERSE ${_prefix}_LIBRARIES)
-    list(REMOVE_DUPLICATES ${_prefix}_LIBRARIES)
-    list(REVERSE ${_prefix}_LIBRARIES)
+    if(${_prefix}_LIBRARIES)
+      find_package(catkin REQUIRED)
+      set(_${_prefix}_LIBRARIES ${${_prefix}_LIBRARIES})
+      set(${_prefix}_LIBRARIES "")
+      list(REVERSE _${_prefix}_LIBRARIES)
+      list_append_unique(${_prefix}_LIBRARIES ${_${_prefix}_LIBRARIES})
+      list(REVERSE ${_prefix}_LIBRARIES)
+    endif()
 
     # Also throw in the libs that we want to link everything against (only
     # use case for this so far is -lgcov when building with code coverage
@@ -291,20 +296,22 @@ macro(rosbuild_init)
   # friends add targets and dependencies from these targets.
   #
 
-  # Find rosunit; rosunit_path will be used later
-  rosbuild_invoke_rospack("" rosunit path find rosunit)
+  # find rosunit since ROSUNIT_SCRIPTS_DIR and ROSUNIT_EXE will be used later
+  find_package(rosunit REQUIRED)
 
   # Record where we're going to put test results (#2003)
-  execute_process(COMMAND ${rosunit_path}/scripts/test_results_dir.py
+  execute_process(COMMAND ${ROSUNIT_SCRIPTS_DIR}/test_results_dir.py
                   OUTPUT_VARIABLE rosbuild_test_results_dir
                   RESULT_VARIABLE _test_results_dir_failed
                   OUTPUT_STRIP_TRAILING_WHITESPACE)
   if(_test_results_dir_failed)
-    message(FATAL_ERROR "Failed to invoke rosunit/scripts/test_results_dir.py")
+    message(FATAL_ERROR "Failed to invoke '${ROSUNIT_SCRIPTS_DIR}/test_results_dir.py'")
   endif(_test_results_dir_failed)
 
   # The 'tests' target builds the test program
-  add_custom_target(tests)
+  if(NOT TARGET tests)
+    add_custom_target(tests)
+  endif()
   # The 'test' target runs all but the future tests
   add_custom_target(test)
   # We need to build tests before running them.  Addition of this
@@ -331,13 +338,13 @@ macro(rosbuild_init)
 
   add_custom_target(test-results-run)
   add_custom_target(test-results
-                    COMMAND ${rosunit_path}/bin/summarize_results.py --nodeps ${_project})
+                    COMMAND ${ROSUNIT_SCRIPTS_DIR}/summarize_results.py --nodeps ${_project})
   add_dependencies(test-results test-results-run)
   # Do we want coverage reporting (only matters for Python, because
   # Bullseye already collects everything into a single file).
   if("$ENV{ROS_TEST_COVERAGE}" STREQUAL "1")
     add_custom_target(test-results-coverage
-                      COMMAND ${rosunit_path}/bin/pycoverage_to_html.py
+                      COMMAND ${ROSUNIT_SCRIPTS_DIR}/pycoverage_to_html.py
                       WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
     # Make tests run before collecting coverage results
     add_dependencies(test-results-coverage test-results-run)
@@ -432,61 +439,10 @@ macro(rosbuild_init)
   endforeach(_f)
 
 
-  #
-  # Gather the gtest build flags, for use when building unit tests.  We
-  # don't require the user to declare a dependency on gtest.
-  #
-  find_program(GTEST_EXE NAMES gtest-config DOC "gtest-config executable" ONLY_CMAKE_FIND_ROOT_PATH)
-  if (NOT GTEST_EXE)
-    if (GTEST_LIBRARIES)
-      set(_gtest_LIBRARIES -l${GTEST_LIBRARIES})
-    else(GTEST_LIBRARIES)
-      set(_gtest_LIBRARIES -lgtest)
-    endif(GTEST_LIBRARIES)
-    # Couldn't find gtest-config. Hoping that gtest is in our path either in the system install or where ROS_BINDEPS points to
-  else (NOT GTEST_EXE)
-
-  execute_process(COMMAND ${GTEST_EXE} --includedir
-                  OUTPUT_VARIABLE gtest_include_dir
-                  RESULT_VARIABLE _gtest_include_dir
-                  OUTPUT_STRIP_TRAILING_WHITESPACE)
-  if(_gtest_include_dir)
-    message(FATAL_ERROR "Failed to invoke gtest-config")
-  endif(_gtest_include_dir)
-
-  include_directories(${gtest_include_dir})
-
-  execute_process(COMMAND ${GTEST_EXE} --libdir
-                  OUTPUT_VARIABLE gtest_lib_dir
-                  RESULT_VARIABLE _gtest_lib_dir
-                  OUTPUT_STRIP_TRAILING_WHITESPACE)
-  if(_gtest_lib_dir)
-    message(FATAL_ERROR "Failed to invoke gtest-config")
-  endif(_gtest_lib_dir)
-  link_directories(${gtest_lib_dir})
-
-
-  execute_process(COMMAND ${GTEST_EXE} --libs
-                  OUTPUT_VARIABLE gtest_libs
-                  RESULT_VARIABLE _gtest_libs
-                  OUTPUT_STRIP_TRAILING_WHITESPACE)
-  if(_gtest_libs)
-    message(FATAL_ERROR "Failed to invoke gtest-config")
-  endif(_gtest_libs)
-
-
-  set(_gtest_LIBRARIES ${gtest_libs})
-  set(_gtest_CFLAGS_OTHER "")
-  set(_gtest_LDFLAGS_OTHER "-Wl,-rpath,${gtest_lib_dir}")
-  endif (NOT GTEST_EXE)
-
-  #
-  # The following code removes duplicate libraries from the link line,
-  # saving only the last one.
-  #
-  list(REVERSE _gtest_LIBRARIES)
-  list(REMOVE_DUPLICATES _gtest_LIBRARIES)
-  list(REVERSE _gtest_LIBRARIES)
+  # gtest has been found by catkin
+  if(GTEST_FOUND)
+    include_directories(${GTEST_INCLUDE_DIRS})
+  endif()
 
   # Delete the files that let rospack know messages/services have been generated
   file(REMOVE ${PROJECT_SOURCE_DIR}/msg_gen/generated)
@@ -589,23 +545,14 @@ endmacro(rosbuild_add_library_module)
 # assume that's already built.
 macro(rosbuild_add_gtest_build_flags exe)
   if (NOT GTEST_FOUND)
-    # gtest is installed but there might not be any library (e.g. Ubuntu Precise), so build it
-    if (EXISTS "/usr/src/gtest")
-      if (NOT EXISTS "${CMAKE_BINARY_DIR}/_gtest_from_src")
-        # for now, this would only work on Ubuntu
-        add_subdirectory("/usr/src/gtest/" ${CMAKE_BINARY_DIR}/_gtest_from_src)
-      endif()
-    else()
-      message(WARNING "GTest not found; C++ tests will fail to build.")
-    endif()
+    message(WARNING "GTest not found; C++ tests will fail to build.")
   endif()
-  rosbuild_add_compile_flags(${exe} ${_gtest_CFLAGS_OTHER})
   if (LIBRARY_OUTPUT_PATH)
     # add this as GTest builds there
     set_target_properties(${exe} PROPERTIES LINK_FLAGS "-L${LIBRARY_OUTPUT_PATH}")
   endif()
-  target_link_libraries(${exe} ${_gtest_LIBRARIES})
-  rosbuild_add_link_flags(${exe} ${_gtest_LDFLAGS_OTHER})
+  target_link_libraries(${exe} ${GTEST_LIBRARIES})
+  link_directories(${GTEST_LIBRARY_DIRS})
   rosbuild_declare_test(${exe})
   add_dependencies(${exe} gtest gtest_main)
 endmacro(rosbuild_add_gtest_build_flags)
@@ -636,7 +583,7 @@ macro(rosbuild_add_gtest exe)
   endif(CMAKE_MINOR_VERSION LESS 6)
   add_dependencies(test test_${_testname})
   # Register check for test output
-  _rosbuild_check_rostest_xml_result(${_testname} ${rosbuild_test_results_dir}/${PROJECT_NAME}/TEST-${_testname}.xml)
+  _rosbuild_check_rostest_xml_result(${_testname} ${rosbuild_test_results_dir}/${PROJECT_NAME}/rostest-${_testname}.xml)
 endmacro(rosbuild_add_gtest)
 
 # A version of add_gtest that checks a label against ROS_BUILD_TEST_LABEL
@@ -677,7 +624,7 @@ macro(rosbuild_add_pyunit file)
   endif(CMAKE_MINOR_VERSION LESS 6)
   add_dependencies(test pyunit_${_testname})
   # Register check for test output
-  _rosbuild_check_rostest_xml_result(${_testname} ${rosbuild_test_results_dir}/${PROJECT_NAME}/TEST-${_testname}.xml)
+  _rosbuild_check_rostest_xml_result(${_testname} ${rosbuild_test_results_dir}/${PROJECT_NAME}/rosunit-${_testname}.xml)
 endmacro(rosbuild_add_pyunit)
 
 # A version of add_pyunit that checks a label against ROS_BUILD_TEST_LABEL
