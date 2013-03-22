@@ -31,7 +31,7 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-# Revision $Id: summarize_results.py 15540 2011-12-30 22:43:26Z kwc $
+# Revision $Id$
 
 """
 Prints summary of aggregated test results to stdout. This is useful

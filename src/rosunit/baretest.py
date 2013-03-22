@@ -30,7 +30,7 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-# Revision $Id: baretest.py 16827 2012-07-06 02:04:36Z dthomas $
+# Revision $Id$
 
 """
 rostest implementation of running bare (gtest-compatible) unit test

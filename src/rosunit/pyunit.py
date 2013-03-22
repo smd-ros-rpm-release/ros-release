@@ -30,7 +30,7 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-# Revision $Id: pyunit.py 13645 2011-04-12 08:06:10Z kwc $
+# Revision $Id$
 
 """
 Wrapper for running Python unittest within rosunit/rostest framework.

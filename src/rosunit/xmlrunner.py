@@ -5,7 +5,7 @@ XML Test Runner for PyUnit
 # Written by Sebastian Rittau <srittau@jroger.in-berlin.de> and placed in
 # the Public Domain. With contributions by Paolo Borelli.
 
-__revision__ = "$Id: xmlrunner.py 11902 2010-10-27 03:21:24Z kwc $"
+__revision__ = "$Id$"
 
 import os.path
 import re
