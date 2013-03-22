@@ -1,3 +1,3 @@
 [git-buildpackage]
-upstream-branch=release/rosbash/1.9.42
+upstream-branch=@(release_tag)
 upstream-tree=branch
