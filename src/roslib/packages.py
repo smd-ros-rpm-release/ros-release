@@ -30,8 +30,8 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-# Revision $Id: packages.py 17091 2012-09-25 04:51:11Z dthomas $
-# $Author: dthomas $
+# Revision $Id$
+# $Author$
 
 """
 Warning: do not use this library.  It is unstable and most of the routines
@@ -174,6 +174,7 @@ def get_pkg_dir(package, required=True, ros_root=None, ros_package_path=None):
         if not pkg_dir:
             raise InvalidROSPkgException("Cannot locate installation of package %s: %s. ROS_ROOT[%s] ROS_PACKAGE_PATH[%s]"%(package, rperr.strip(), ros_root, ros_package_path))
 
+        pkg_dir = os.path.normpath(pkg_dir)
         if not os.path.exists(pkg_dir):
             raise InvalidROSPkgException("Cannot locate installation of package %s: [%s] is not a valid path. ROS_ROOT[%s] ROS_PACKAGE_PATH[%s]"%(package, pkg_dir, ros_root, ros_package_path))
         elif not os.path.isdir(pkg_dir):
@@ -412,7 +413,7 @@ def _find_resource(d, resource_name, filter_fn=None):
         # Windows logic requires more file patterns to resolve and is
         # not case-sensitive, so leave it separate
 
-        # in the near-term, just hack in support for .exe/.bat. In the long
+        # in the near-term, just hack in support for .exe/.bat/.py. In the long
         # term this needs to:
         #
         #  * parse PATHEXT to generate matches
@@ -422,7 +423,7 @@ def _find_resource(d, resource_name, filter_fn=None):
         # - We still have to look for bare node_type as user may have
         #   specified extension manually
         resource_name = resource_name.lower()
-        patterns = [resource_name, resource_name+'.exe', resource_name+'.bat']
+        patterns = [resource_name, resource_name+'.exe', resource_name+'.bat', resource_name+'.py']
         for p, dirs, files in os.walk(d):
             # case insensitive
             files = [f.lower() for f in files]
@@ -493,13 +494,15 @@ def find_resource(pkg, resource_name, filter_fn=None, rospack=None):
     # if found in binary dir, start with that.  in any case, use matches
     # from ros_package_path
     matches = []
-    for search_dirs in ['libexec', 'share']:
-        try:
-            search_paths, _ = catkin_find(search_dirs=[search_dirs], project=pkg)
-            for search_path in search_paths:
-                matches.extend(_find_resource(search_path, resource_name, filter_fn=filter_fn))
-        except RuntimeError:
-            pass
+    search_paths = catkin_find(search_dirs=['libexec', 'share'], project=pkg, first_matching_workspace_only=True)
+    for search_path in search_paths:
+        matches.extend(_find_resource(search_path, resource_name, filter_fn=filter_fn))
+
     matches.extend(_find_resource(pkg_path, resource_name, filter_fn=filter_fn))
-    # Uniquify the results, in case we found the same file twice
-    return list(set(matches))
+
+    # Uniquify the results, in case we found the same file twice, while keeping order
+    unique_matches = []
+    for match in matches:
+        if match not in unique_matches:
+            unique_matches.append(match)
+    return unique_matches
