@@ -32,7 +32,7 @@
 #
 # Revision $Id$
 
-from __future__ import with_statement
+from __future__ import with_statement, print_function
 
 import os
 import sys
@@ -87,7 +87,7 @@ def rosunitmain():
     if not pkg:
         pkg = rospkg.get_package_name(test_file)
     if not pkg:
-        print "Error: failed to determine package name for file '%s'; maybe you should supply the --package argument to rosunit?"%(test_file)
+        print("Error: failed to determine package name for file '%s'; maybe you should supply the --package argument to rosunit?"%(test_file))
         sys.exit(1)
 
     try:
@@ -117,7 +117,7 @@ def rosunitmain():
     if not options.text_mode:
         print_runner_summary(runner_result, results)
     else:
-        print "WARNING: overall test result is not accurate when --text is enabled"
+        print("WARNING: overall test result is not accurate when --text is enabled")
 
     if runner_result is not None and not runner_result.wasSuccessful():
         sys.exit(1)
