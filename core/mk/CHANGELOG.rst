@@ -2,16 +2,13 @@
 Changelog for package mk
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-1.10.1 (2013-06-06)
+1.9.46 (2013-06-06)
 -------------------
 * add missing environment exports to make eclipse-projects of dry packages build
 * cleanup catkin generated files/directories after make eclips-project
 
-1.10.0 (2013-03-22 09:23)
+1.9.45 (2013-03-22 09:18)
 -------------------------
-
-1.9 (Groovy)
-============
 
 1.9.44 (2013-03-13)
 -------------------
