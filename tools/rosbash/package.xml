@@ -1,6 +1,6 @@
 <package>
   <name>rosbash</name>
-  <version>1.9.49</version>
+  <version>1.10.5</version>
   <description>
     Assorted shell commands for using ros with bash.
   </description>
@@ -11,7 +11,7 @@
   <author>Jeremy Leibs</author>
   <author>Thibault Kruse</author>
 
-  <buildtool_depend>catkin</buildtool_depend>
+  <buildtool_depend version_gte="0.5.72">catkin</buildtool_depend>
 
   <run_depend>catkin</run_depend>
 </package>
