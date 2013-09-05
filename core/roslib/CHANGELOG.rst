@@ -2,6 +2,15 @@
 Changelog for package roslib
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.9.51 (2013-08-22)
+-------------------
+* fix regression of `#29 <https://github.com/ros/ros/issues/29>`_ introduced in 1.9.50
+
+1.9.50 (2013-08-21)
+-------------------
+* make roslib relocatable (`ros/catkin#490 <https://github.com/ros/catkin/issues/490>`_)
+* improve performance of dry message generation
+
 1.9.49 (2013-07-05)
 -------------------
 
