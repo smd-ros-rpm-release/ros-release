@@ -2,31 +2,29 @@
 Changelog for package rosbash
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-1.10.6 (2013-08-22)
+1.9.51 (2013-08-22)
 -------------------
 
-1.10.5 (2013-08-21)
+1.9.50 (2013-08-21)
 -------------------
-* make rosunit relocatable (`ros/catkin#490 <https://github.com/ros/catkin/issues/490>`_)
+* make rosbash relocatable (`ros/catkin#490 <https://github.com/ros/catkin/issues/490>`_)
 * fix home expansion in completion on OS X (`#27 <https://github.com/ros/ros/issues/27>`_)
 
-1.10.4 (2013-07-05)
+1.9.49 (2013-07-05)
 -------------------
 
-1.10.3 (2013-07-03)
+1.9.48 (2013-07-03)
+-------------------
+* enable roslaunch args completion in rosbash (`#19 <https://github.com/ros/ros/issues/19>`_)
+
+1.9.47 (2013-06-18)
 -------------------
 
-1.10.2 (2013-06-18)
+1.9.46 (2013-06-06)
 -------------------
 
-1.10.1 (2013-06-06)
--------------------
-
-1.10.0 (2013-03-22 09:23)
+1.9.45 (2013-03-22 09:18)
 -------------------------
-
-1.9 (Groovy)
-============
 
 1.9.44 (2013-03-13)
 -------------------

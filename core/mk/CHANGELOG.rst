@@ -2,32 +2,29 @@
 Changelog for package mk
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-1.10.6 (2013-08-22)
+1.9.51 (2013-08-22)
 -------------------
 
-1.10.5 (2013-08-21)
+1.9.50 (2013-08-21)
 -------------------
 
-1.10.4 (2013-07-05)
+1.9.49 (2013-07-05)
 -------------------
 * update eclipse-project target to not try to delete CATKIN_IGNORE marker files and check before trying to delete other files/folders (`#20 <https://github.com/ros/ros/issues/20>`_)
 
-1.10.3 (2013-07-03)
+1.9.48 (2013-07-03)
 -------------------
 
-1.10.2 (2013-06-18)
+1.9.47 (2013-06-18)
 -------------------
 
-1.10.1 (2013-06-06)
+1.9.46 (2013-06-06)
 -------------------
 * add missing environment exports to make eclipse-projects of dry packages build
 * cleanup catkin generated files/directories after make eclips-project
 
-1.10.0 (2013-03-22 09:23)
+1.9.45 (2013-03-22 09:18)
 -------------------------
-
-1.9 (Groovy)
-============
 
 1.9.44 (2013-03-13)
 -------------------
