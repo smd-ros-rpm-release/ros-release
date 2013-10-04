@@ -1,3 +1,33 @@
+## ros - 1.10.7-0
+
+User `dthomas@drudge` released the packages in the `ros` repository by running `/usr/bin/bloom-release -t hydro -r hydro ros` on `Fri, 04 Oct 2013 08:16:09 -0000`
+
+These packages were released:
+- `mk`
+- `ros`
+- `rosbash`
+- `rosboost_cfg`
+- `rosbuild`
+- `rosclean`
+- `roscreate`
+- `roslang`
+- `roslib`
+- `rosmake`
+- `rosunit`
+
+Version of package(s) in repository `ros`:
+- rosdistro version: `1.10.6-0`
+- old version: `1.10.6-0`
+- new version: `1.10.7-0`
+
+Versions of tools used:
+- bloom version: `0.4.4`
+- catkin_pkg version: `0.1.20`
+- rosdep version: `0.10.22`
+- rosdistro version: `0.2.14`
+- vcstools version: `0.1.31`
+
+
 ## ros - 1.9.52-0
 
 User `dthomas@drudge` released the packages in the `ros` repository by running `/usr/bin/bloom-release -t groovy -r groovy ros` on `Fri, 04 Oct 2013 07:49:12 -0000`
