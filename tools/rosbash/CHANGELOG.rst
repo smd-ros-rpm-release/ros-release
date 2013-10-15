@@ -2,6 +2,10 @@
 Changelog for package rosbash
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.10.8 (2013-10-15)
+-------------------
+* fix check for permissions of executables (regression from `#37 <https://github.com/ros/ros/issues/37>`_ in 1.10.7)
+
 1.10.7 (2013-10-04)
 -------------------
 * use platform dependent argument for 'find -perm' (`#33 <https://github.com/ros/ros/issues/33>`_)
