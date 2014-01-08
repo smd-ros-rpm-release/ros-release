@@ -15,10 +15,11 @@ import sys
 import time
 import traceback
 import unittest
-from StringIO import StringIO
+try:
+    from cStringIO import StringIO
+except ImportError:
+    from io import StringIO
 from xml.sax.saxutils import escape
-
-from StringIO import StringIO
 
 
 class _TestInfo(object):
