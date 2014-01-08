@@ -2,6 +2,11 @@
 Changelog for package rosunit
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.10.9 (2014-01-07)
+-------------------
+* python 3 compatibility
+* fix repo urls in manifest
+
 1.10.8 (2013-10-15)
 -------------------
 
