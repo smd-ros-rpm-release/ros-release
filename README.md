@@ -1,3 +1,33 @@
+## ros - 1.11.0-0
+
+User `dthomas@drudge` released the packages in the `ros` repository by running `/usr/bin/bloom-release -r indigo -t indigo ros` on `Fri, 31 Jan 2014 17:45:53 -0000`
+
+These packages were released:
+- `mk`
+- `ros`
+- `rosbash`
+- `rosboost_cfg`
+- `rosbuild`
+- `rosclean`
+- `roscreate`
+- `roslang`
+- `roslib`
+- `rosmake`
+- `rosunit`
+
+Version of package(s) in repository `ros`:
+- rosdistro version: `null`
+- old version: `None-0`
+- new version: `1.11.0-0`
+
+Versions of tools used:
+- bloom version: `0.4.8`
+- catkin_pkg version: `0.1.25`
+- rosdep version: `0.10.25`
+- rosdistro version: `0.3.3`
+- vcstools version: `0.1.33`
+
+
 ## ros - 1.10.9-0
 
 User `dthomas@drudge` released the packages in the `ros` repository by running `/usr/bin/bloom-release -t hydro -r hydro ros` on `Wed, 08 Jan 2014 06:28:56 -0000`
