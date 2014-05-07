@@ -2,6 +2,10 @@
 Changelog for package rosbash
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.11.1 (2014-05-07)
+-------------------
+* add rosrun --prefix, update completion (`#52 <https://github.com/ros/ros/issues/52>`_)
+
 1.11.0 (2014-01-31)
 -------------------
 
