@@ -1,3 +1,33 @@
+## ros (hydro) - 1.10.10-0
+
+The packages in the `ros` repository were released into the `hydro` distro by running `/usr/bin/bloom-release -r hydro -t hydro ros` on `Tue, 03 Jun 2014 01:28:25 -0000`
+
+These packages were released:
+- `mk`
+- `ros`
+- `rosbash`
+- `rosboost_cfg`
+- `rosbuild`
+- `rosclean`
+- `roscreate`
+- `roslang`
+- `roslib`
+- `rosmake`
+- `rosunit`
+
+Version of package(s) in repository `ros`:
+- rosdistro version: `1.10.9-0`
+- old version: `1.10.9-0`
+- new version: `1.10.10-0`
+
+Versions of tools used:
+- bloom version: `0.5.9`
+- catkin_pkg version: `0.2.2`
+- rosdep version: `0.10.27`
+- rosdistro version: `0.3.5`
+- vcstools version: `0.1.35`
+
+
 ## ros (indigo) - 1.11.1-1
 
 The packages in the `ros` repository were released into the `indigo` distro by running `/usr/bin/bloom-release -r indigo -t indigo ros` on `Wed, 21 May 2014 00:52:10 -0000`
