@@ -176,8 +176,12 @@ macro(rosbuild_init)
   # Check that the package directory is correct
   _rosbuild_check_package_location()
 
+  # force automatic escaping of preprocessor definitions
+  cmake_policy(PUSH)
+  cmake_policy(SET CMP0005 NEW)
   # Add ROS_PACKAGE_NAME define
-  add_definitions(-DROS_PACKAGE_NAME='\"${PROJECT_NAME}\"')
+  add_definitions(-DROS_PACKAGE_NAME=\"${PROJECT_NAME}\")
+  cmake_policy(POP)
 
   # ROS_BUILD_TYPE is set by rosconfig
   # RelWithAsserts is our own type, not supported by CMake
@@ -327,7 +331,7 @@ macro(rosbuild_init)
   # handle lingers in the test results directory), because CMake doesn't
   # seem to be able to do it.
   add_custom_target(rosbuild_clean-test-results
-                    if ! rm -rf ${rosbuild_test_results_dir}/${PROJECT_NAME}\; then echo "WARNING: failed to remove test-results directory"\; fi)
+                    if ! rm -rf ${rosbuild_test_results_dir}/${PROJECT_NAME}\; then echo "\"WARNING: failed to remove test-results directory\"\;" fi)
   # Make the tests target depend on rosbuild_clean-test-results, which will ensure
   # that test results are deleted before we try to build tests, and thus
   # before we try to run tests.
