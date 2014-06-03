@@ -2,6 +2,10 @@
 Changelog for package roslib
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.10.10 (2014-06-02)
+--------------------
+* add optional argument force_recrawl to getPlugins function
+
 1.10.9 (2014-01-07)
 -------------------
 
