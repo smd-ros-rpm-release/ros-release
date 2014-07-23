@@ -1,3 +1,33 @@
+## ros (indigo) - 1.11.4-0
+
+The packages in the `ros` repository were released into the `indigo` distro by running `/usr/bin/bloom-release -r indigo -t indigo ros` on `Wed, 23 Jul 2014 19:39:44 -0000`
+
+These packages were released:
+- `mk`
+- `ros`
+- `rosbash`
+- `rosboost_cfg`
+- `rosbuild`
+- `rosclean`
+- `roscreate`
+- `roslang`
+- `roslib`
+- `rosmake`
+- `rosunit`
+
+Version of package(s) in repository `ros`:
+- rosdistro version: `1.11.3-0`
+- old version: `1.11.3-0`
+- new version: `1.11.4-0`
+
+Versions of tools used:
+- bloom version: `0.5.10`
+- catkin_pkg version: `0.2.4`
+- rosdep version: `0.10.28`
+- rosdistro version: `0.3.5`
+- vcstools version: `0.1.35`
+
+
 ## ros (indigo) - 1.11.3-0
 
 The packages in the `ros` repository were released into the `indigo` distro by running `/usr/bin/bloom-release -r indigo -t indigo ros` on `Fri, 18 Jul 2014 21:52:01 -0000`
