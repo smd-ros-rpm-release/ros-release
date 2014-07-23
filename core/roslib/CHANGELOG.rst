@@ -2,6 +2,9 @@
 Changelog for package roslib
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.11.4 (2014-07-23)
+-------------------
+
 1.11.3 (2014-07-18)
 -------------------
 * remove linking against "rt" library on Android (`#57 <https://github.com/ros/ros/issues/57>`_)
